@@ -1,9 +1,11 @@
 import { inconsistentRead } from './unpredictable-function.js';
+import { consistentDeferredReadAsync } from './deferred-execution.js';
 
 function createFileReader(filename) {
     const listeners = [];
 
-    inconsistentRead(filename, value => {
+    // inconsistentRead(filename, value => {
+    consistentDeferredReadAsync(filename, value => {
         console.log('listeners_length!!', listeners.length);
         listeners.forEach(listener => {
             console.log('listener!!', listener);
