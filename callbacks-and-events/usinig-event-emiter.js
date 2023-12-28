@@ -23,7 +23,7 @@ function findRegex (files, regex) {
     return emitter;
 }
 
-findRegex(['data.txt'], /hello \w+/g)
+findRegex(['data.txt', 'fileA.txt'], /hello \w+/g)
     .on('fileread', file => console.log(`${file} was read`))
     .on('found', (file, match) => console.log(`Matched "${match}" in ${file}`))
     .on('error', err => console.error(`Error emitted ${err.message}`)
