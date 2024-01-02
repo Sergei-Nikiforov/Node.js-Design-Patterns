@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "glob": "^10.3.10"
+    "glob": "^10.3.10",
+    "mkdirp": "^3.0.1",
+    "superagent": "^8.1.2"
   }
 }
