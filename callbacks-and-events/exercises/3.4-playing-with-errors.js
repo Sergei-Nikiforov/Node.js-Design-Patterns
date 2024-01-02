@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events';
-// it emits a tick event immediately after the function is invoked
 
 function callbackAndEvents(inputMs, callback) {
     const eventEmitter = new EventEmitter();
