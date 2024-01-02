@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 // it emits a tick event immediately after the function is invoked
+// tick events are missed
 
 function callbackAndEvents(inputMs, callback) {
     const eventEmitter = new EventEmitter();
@@ -26,4 +27,5 @@ function callbackAndEvents(inputMs, callback) {
     
 }
 
-callbackAndEvents(500, count => {console.log('number of tick events: ', count )}).on('tick', tick => console.log('Event:', tick));
+callbackAndEvents(500, count => {console.log('number of tick events: ', count)})
+.on('tick', tick => console.log('Event:', tick));

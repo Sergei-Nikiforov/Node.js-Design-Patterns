@@ -23,4 +23,5 @@ function callbackAndEvents(inputMs, callback) {
     
 }
 
-callbackAndEvents(500, count => {console.log('number of tick events: ', count )}).on('tick', tick => console.log('Event:', tick));
+callbackAndEvents(500, count => {console.log('number of tick events: ', count )})
+.on('tick', tick => console.log('Event:', tick));
