@@ -2,10 +2,15 @@ import { createServer } from 'http'
 import { createWriteStream } from 'fs'
 import { createGunzip } from 'zlib'
 import { basename, join } from 'path'
-import { createDecipheriv, randomBytes } from 'crypto'
+import { createDecipheriv, randomBytes, scryptSync } from 'crypto'
 
-const secret = randomBytes(24)
+//const secret = randomBytes(24)
+const secret = createKey("secret-key");
 console.log(`Generated secret: ${secret.toString('hex')}`)
+
+function createKey (password) {
+  return scryptSync(password, 'salt', 24)
+}
 
 const server = createServer((req, res) => {
   const filename = basename(req.headers['x-filename'])

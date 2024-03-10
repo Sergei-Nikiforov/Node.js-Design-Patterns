@@ -2,13 +2,18 @@ import { request } from 'http'
 import { createGzip } from 'zlib'
 import { createReadStream } from 'fs'
 import { basename } from 'path'
-import { createCipheriv, randomBytes } from 'crypto'
+import { createCipheriv, randomBytes, scryptSync } from 'crypto'
 
 const filename = process.argv[2]
 const serverHost = process.argv[3]
-const secret = Buffer.from(process.argv[4], 'hex')
+// const secret = Buffer.from(process.argv[4], 'hex')
 
 const iv = randomBytes(16)
+function createKey (password) {
+  return scryptSync(password, 'salt', 24)
+}
+
+const secret = createKey("secret-key");
 
 const httpRequestOptions = {
   hostname: serverHost,
