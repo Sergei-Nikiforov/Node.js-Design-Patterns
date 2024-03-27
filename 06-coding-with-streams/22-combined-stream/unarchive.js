@@ -1,16 +1,15 @@
 import { createReadStream, createWriteStream } from 'fs'
 import { pipeline } from 'stream'
 import { randomBytes } from 'crypto'
-import { createCompressAndEncrypt } from './combined-streams.js'
+import { createCompressAndEncrypt, createDecryptAndDecompress } from './combined-streams.js'
 
-const [,, password, source] = process.argv
+const [,, password, source, iv] = process.argv
 console.log(process.argv);
-const iv = randomBytes(16)
-const destination = `${source}.gz.enc`
+const destination = `${source}.json`
 
 pipeline(
   createReadStream(source),
-  createCompressAndEncrypt(password, iv),
+  createDecryptAndDecompress(password, Buffer.from(iv, 'hex')),
   createWriteStream(destination),
   (err) => {
     if (err) {
