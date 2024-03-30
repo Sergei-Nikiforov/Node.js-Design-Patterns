@@ -12,7 +12,7 @@ function demultiplexChannel (source, destinations) {
         chunk = source.read(1)
         currentChannel = chunk && chunk.readUInt8(0)
       }
-
+      
       if (currentLength === null) { // ③
         chunk = source.read(4)
         currentLength = chunk && chunk.readUInt32BE(0)

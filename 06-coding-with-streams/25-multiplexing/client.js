@@ -25,6 +25,8 @@ function multiplexChannels (sources, destination) {
 }
 
 const socket = connect(3000, () => { // ①
+  console.log(process.argv[2]);
+  console.log(process.argv.slice(3));
   const child = fork( // ②
     process.argv[2],
     process.argv.slice(3),

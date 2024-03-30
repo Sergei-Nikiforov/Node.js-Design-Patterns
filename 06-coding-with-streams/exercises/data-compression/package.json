@@ -1,0 +1,13 @@
+{
+  "name": "6.1-data-compression-efficiency",
+  "version": "1.0.0",
+  "description": "",
+  "main": "data-compression.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
