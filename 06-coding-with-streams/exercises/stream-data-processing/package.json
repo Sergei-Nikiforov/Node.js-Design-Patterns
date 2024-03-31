@@ -1,0 +1,22 @@
+{
+  "name": "stream-data-processing",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "serg",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.5.12",
+    "csv-parse": "^5.5.5",
+    "node-stream-zip": "^1.15.0"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "engineStrict": true
+}

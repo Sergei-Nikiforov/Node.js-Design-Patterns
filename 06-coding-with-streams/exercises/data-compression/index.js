@@ -58,7 +58,7 @@ class InputStream {
             })
     }
 
-    async process() {
+    process() {
         console.log('compression_start', new Date());
 
         this.brIputStream();
