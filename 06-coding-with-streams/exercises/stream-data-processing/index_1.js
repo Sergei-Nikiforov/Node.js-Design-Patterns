@@ -1,6 +1,7 @@
 import StreamZip from 'node-stream-zip';
 import { Iterate } from './iterate-records.js';
 import { parse } from 'csv-parse';
+import { LeastCommonCrime } from './least-common.js';
 // const zip = new StreamZip({ file: process.argv[2], storeEntries: true });
 
 // zip.on('ready', () => {
@@ -32,17 +33,34 @@ import { parse } from 'csv-parse';
 //   }
 
 
-const extract = async () => {
-    const zip = new StreamZip.async({ file: process.argv[2], storeEntries: true });
-    const entries = await zip.entries();
-    const name = Object.values(entries)[0].name;
-    const csvParser = parse({ columns: true });
-    const inputStream = await zip.stream(name);
+  class InputStream {
+    constructor(inputStream) {
+        this.inputStream = inputStream;
+    }
 
-//    inputStream.pipe(process.stdout);
-    inputStream.pipe(csvParser)
-    .pipe(new Iterate())
-    .on('end', () => zip.close());
+    static async factory() {
+        const zip = new StreamZip.async({ file: process.argv[2], storeEntries: true });
+        const entries = await zip.entries();
+        const name = Object.values(entries)[0].name;
+        const csvParser = parse({ columns: true });
+        const readableStream = await zip.stream(name);
+        const inputStream = readableStream.pipe(csvParser);
+
+        return new this(inputStream);
+    }
+
+    leastCommonCrime() {
+        this.inputStream
+            .pipe(LeastCommonCrime.factory())
+            .pipe(process.stdout)
+            .on('end', () => zip.close());
+    }
+
+
+    process() {
+        this.leastCommonCrime();
+    }
+
   }
 
-  extract()
+  (await InputStream.factory()).process();
