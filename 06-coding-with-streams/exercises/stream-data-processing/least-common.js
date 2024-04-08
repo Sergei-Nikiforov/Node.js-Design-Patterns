@@ -14,7 +14,12 @@ export class LeastCommonCrime extends Transform {
         return new this();
     }
 
-    collectCrimesByMajourCategory(record) {
+    collectCrimes(record) {
+        this.collectMajour(record);
+        this.collectMinor(record);
+    }
+
+    collectMajour(record) {
         if (record.major_category in this.leastOfMajourCrimes) {
             this.leastOfMajourCrimes[record.major_category] += +record.value;
             return;
@@ -23,19 +28,34 @@ export class LeastCommonCrime extends Transform {
         this.leastOfMajourCrimes[record.major_category] = +record.value;
     }
 
+    collectMinor(record) {
+        if (record.minor_category in this.leastOfMinorCrimes) {
+            this.leastOfMinorCrimes[record.minor_category] += +record.value;
+            return;
+        }
+
+        this.leastOfMinorCrimes[record.minor_category] = +record.value;
+    }
+
+
     _transform (record, enc, cb) {
-        this.collectCrimesByMajourCategory(record);
+        this.collectCrimes(record);
         cb();
     }
 
     _flush (cb) {
 //        this.push(`${JSON.stringify(this.leastOfMajourCrimes)}\n`);
-        this.push(`${JSON.stringify(this.sortResult())}\n`);
+        this.push(`major_category - ${JSON.stringify(this.sortMajourResult())}\n`);
+        this.push(`minor_category - ${JSON.stringify(this.sortMinorResult())}\n`);
         cb();
     }
 
-    sortResult() {
+    sortMajourResult() {
         return Object.entries(this.leastOfMajourCrimes).sort((a, b) => a[1] - b[1]);
+    }
+
+    sortMinorResult() {
+        return Object.entries(this.leastOfMinorCrimes).sort((a, b) => a[1] - b[1]);
     }
 
 }
