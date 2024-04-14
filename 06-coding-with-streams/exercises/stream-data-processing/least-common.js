@@ -1,16 +1,14 @@
-import { Transform } from 'stream'
+import { Transform } from 'stream';
 
 export class LeastCommonCrime extends Transform {
     constructor (options = {}) {
         options.objectMode = true;
         super(options);
-        this.total = 0;
         this.leastOfMajourCrimes = {};
         this.leastOfMinorCrimes = {};
     }
     
     static factory() {
-
         return new this();
     }
 
@@ -44,7 +42,6 @@ export class LeastCommonCrime extends Transform {
     }
 
     _flush (cb) {
-//        this.push(`${JSON.stringify(this.leastOfMajourCrimes)}\n`);
         this.push(`major_category - ${JSON.stringify(this.sortMajourResult())}\n`);
         this.push(`minor_category - ${JSON.stringify(this.sortMinorResult())}\n`);
         cb();

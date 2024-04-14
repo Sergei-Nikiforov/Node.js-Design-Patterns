@@ -2,6 +2,9 @@ import StreamZip from 'node-stream-zip';
 import { Iterate } from './iterate-records.js';
 import { parse } from 'csv-parse';
 import { LeastCommonCrime } from './least-common.js';
+import { NumberOfCrimesOverYears } from './number-of-crimes.js'
+import { FilterByCity } from './london/filter-by-city.js';
+import { DangerousArea } from './london/dangerous-area.js';
 // const zip = new StreamZip({ file: process.argv[2], storeEntries: true });
 
 // zip.on('ready', () => {
@@ -49,16 +52,32 @@ import { LeastCommonCrime } from './least-common.js';
         return new this(inputStream);
     }
 
+    process() {
+        this.leastCommonCrime();
+        this.crimeNumberOverYears();
+        this.londonCrimes();
+    }
+
     leastCommonCrime() {
         this.inputStream
             .pipe(LeastCommonCrime.factory())
             .pipe(process.stdout)
-            .on('end', () => zip.close());
+            .on('end', () => zip.close())
     }
 
+    crimeNumberOverYears() {
+        this.inputStream
+            .pipe(NumberOfCrimesOverYears.factory())
+            .pipe(process.stdout)
+            .on('end', () => zip.close())
+    }
 
-    process() {
-        this.leastCommonCrime();
+    londonCrimes() {
+        this.inputStream
+//            .pipe(new FilterByCity('City of London'))
+            .pipe(new DangerousArea())
+            .pipe(process.stdout)
+            .on('on', () => zip.close())
     }
 
   }
