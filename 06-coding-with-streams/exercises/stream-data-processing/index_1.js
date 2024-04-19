@@ -58,13 +58,6 @@ import { DangerousArea } from './london/dangerous-area.js';
         this.londonCrimes();
     }
 
-    leastCommonCrime() {
-        this.inputStream
-            .pipe(LeastCommonCrime.factory())
-            .pipe(process.stdout)
-            .on('end', () => zip.close())
-    }
-
     crimeNumberOverYears() {
         this.inputStream
             .pipe(NumberOfCrimesOverYears.factory())
@@ -78,6 +71,13 @@ import { DangerousArea } from './london/dangerous-area.js';
             .pipe(new DangerousArea())
             .pipe(process.stdout)
             .on('on', () => zip.close())
+    }
+
+    leastCommonCrime() {
+        this.inputStream
+            .pipe(LeastCommonCrime.factory())
+            .pipe(process.stdout)
+            .on('end', () => zip.close())
     }
 
   }
