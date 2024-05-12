@@ -5,6 +5,7 @@ import { LeastCommonCrime } from './least-common.js';
 import { NumberOfCrimesOverYears } from './number-of-crimes.js'
 import { FilterByCity } from './london/filter-by-city.js';
 import { DangerousArea } from './london/dangerous-area.js';
+import { MostCommonPerArea } from './most-common-per-area.js';
 // const zip = new StreamZip({ file: process.argv[2], storeEntries: true });
 
 // zip.on('ready', () => {
@@ -37,8 +38,9 @@ import { DangerousArea } from './london/dangerous-area.js';
 
 
   class InputStream {
-    constructor(inputStream) {
+    constructor(inputStream, forkNumber) {
         this.inputStream = inputStream;
+        this.forkNumber = forkNumber;
     }
 
     static async factory() {
@@ -48,36 +50,55 @@ import { DangerousArea } from './london/dangerous-area.js';
         const csvParser = parse({ columns: true });
         const readableStream = await zip.stream(name);
         const inputStream = readableStream.pipe(csvParser);
+        let forkNumber = 4;
 
-        return new this(inputStream);
+        return new this(inputStream, forkNumber);
     }
 
     process() {
-        this.leastCommonCrime();
         this.crimeNumberOverYears();
-        this.londonCrimes();
+        this.dangerouseArea();
+        this.mostCommonPerArea();
+        this.leastCommonCrime();
     }
 
     crimeNumberOverYears() {
         this.inputStream
             .pipe(NumberOfCrimesOverYears.factory())
             .pipe(process.stdout)
-            .on('end', () => zip.close())
+            .on('end', () => this.closeStream()())
     }
 
-    londonCrimes() {
+    dangerouseArea() {
         this.inputStream
 //            .pipe(new FilterByCity('City of London'))
             .pipe(new DangerousArea())
             .pipe(process.stdout)
-            .on('on', () => zip.close())
+            .on('end', () => this.closeStream()())
+    }
+
+    commonCrimePerArea() {
+        this.inputStream
+            .pipe()
+            .on('end', () => this.closeStream()())
+    }
+
+    mostCommonPerArea() {
+        this.inputStream
+            .pipe(MostCommonPerArea.factory())
+            .pipe(process.stdout)
+            .on('end', () => this.closeStream())
     }
 
     leastCommonCrime() {
         this.inputStream
             .pipe(LeastCommonCrime.factory())
             .pipe(process.stdout)
-            .on('end', () => zip.close())
+            .on('end', () => this.closeStream())
+    }
+
+    closeStream() {
+        if (--this.forkNumber === 0) zip.close();
     }
 
   }
