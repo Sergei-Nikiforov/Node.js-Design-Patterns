@@ -4,6 +4,8 @@ import split from 'split'
 import request from 'request-promise'
 import { LimitedParallelStream } from './limited-parallel-stream.js'
 
+const lastTime = process.hrtime();
+
 pipeline(
   createReadStream(process.argv[2]),
   split(),
@@ -30,5 +32,7 @@ pipeline(
       process.exit(1)
     }
     console.log('All urls have been checked')
+    const diff = process.hrtime(lastTime)
+    console.log(`Timer took ${diff[0]} seconds ` + `and ${diff[1]} nanoseconds.`);
   }
 )
